@@ -1,0 +1,264 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model SiteSetting {
+  id              String   @id @default("main")
+  foundationName  String   @default("SEZHIYAM FOUNDATION")
+  tagline         String   @default("Serving Humanity, Building Communities")
+  welcomeMessage  String   @default("Welcome to SEZHIYAM FOUNDATION")
+  heroQuote       String   @default("Service to humanity is the best work of life.")
+  heroDescription String   @default("A grassroots NGO working across Tamil Nadu.")
+  aboutContent    String   @default("")
+  visionText      String   @default("")
+  missionText     String   @default("")
+  valuesText      String   @default("")
+  logoUrl         String?
+  phone           String   @default("+91 90000 00000")
+  email           String   @default("info@sezhiyam.org")
+  address         String   @default("Tamil Nadu, India")
+  socialFacebook  String?
+  socialInstagram String?
+  socialYoutube   String?
+  socialTwitter   String?
+  updatedAt       DateTime @updatedAt
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  name        String
+  designation String
+  bio         String?
+  photoUrl    String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Wing {
+  id                  String   @id @default(cuid())
+  name                String
+  description         String
+  iconName            String?
+  inChargeName        String?
+  inChargeDesignation String?
+  inChargePhotoUrl    String?
+  order               Int      @default(0)
+  published           Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([order])
+}
+
+model ImpactStat {
+  id          String   @id @default(cuid())
+  label       String
+  value       Float
+  prefix      String?
+  suffix      String?
+  description String?
+  isYear      Boolean  @default(false)
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
+model GovernanceInfo {
+  id          String   @id @default("main")
+  heading     String   @default("Governance & Transparency")
+  description String   @default("")
+  points      String   @default("")
+  updatedAt   DateTime @updatedAt
+}
+
+model WorkingLocation {
+  id          String   @id @default(cuid())
+  name        String
+  district    String
+  description String?
+  latitude    Float
+  longitude   Float
+  active      Boolean  @default(true)
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Project {
+  id              String         @id @default(cuid())
+  slug            String         @unique
+  title           String
+  description     String
+  longDescription String?
+  coverImage      String?
+  date            DateTime
+  duration        String?
+  location        String
+  beneficiaries   Int            @default(0)
+  fundsReceived   Float          @default(0)
+  fundsUsed       Float          @default(0)
+  category        String         @default("General")
+  status          String         @default("Completed")
+  showFinancials  Boolean        @default(true)
+  published       Boolean        @default(true)
+  isFeatured      Boolean        @default(false)
+  gallery         ProjectImage[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([status])
+  @@index([category])
+  @@index([published])
+}
+
+model ProjectImage {
+  id        String  @id @default(cuid())
+  url       String
+  caption   String?
+  order     Int     @default(0)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model NalamEvent {
+  id              String       @id @default(cuid())
+  slug            String       @unique
+  title           String
+  occasion        String
+  year            Int
+  description     String
+  longDescription String?
+  coverImage      String?
+  date            DateTime
+  location        String
+  beneficiaries   Int          @default(0)
+  fundsReceived   Float        @default(0)
+  fundsUsed       Float        @default(0)
+  published       Boolean      @default(true)
+  gallery         NalamImage[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([occasion])
+  @@index([year])
+  @@index([published])
+}
+
+model NalamImage {
+  id           String     @id @default(cuid())
+  url          String
+  caption      String?
+  order        Int        @default(0)
+  nalamEventId String
+  nalamEvent   NalamEvent @relation(fields: [nalamEventId], references: [id], onDelete: Cascade)
+
+  @@index([nalamEventId])
+}
+
+model NewsPost {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+  eventDate   DateTime?
+  location    String?
+  isEvent     Boolean  @default(false)
+  isImportant Boolean  @default(false)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published])
+  @@index([isEvent])
+}
+
+model Enquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  message   String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Donation {
+  id               String   @id @default(cuid())
+  donorName        String
+  donorEmail       String
+  donorPhone       String?
+  amount           Float
+  currency         String   @default("INR")
+  status           String   @default("pending")
+  paymentReference String?  @unique
+  projectId        String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Report {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  fileUrl       String
+  fileName      String
+  fileSize      Int?
+  projectId     String?
+  nalamId       String?
+  eventDate     DateTime?
+  location      String?
+  internalNotes String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model AdminUser {
+  id           String             @id @default(cuid())
+  email        String             @unique
+  name         String
+  passwordHash String
+  role         String             @default("admin")
+  active       Boolean            @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  logs         AdminActivityLog[]
+}
+
+model AdminActivityLog {
+  id         String     @id @default(cuid())
+  adminId    String?
+  admin      AdminUser? @relation(fields: [adminId], references: [id])
+  action     String
+  targetType String?
+  targetId   String?
+  details    String?
+  createdAt  DateTime   @default(now())
+
+  @@index([adminId])
+  @@index([createdAt])
+}

@@ -39,3 +39,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local file storage (do not commit uploads)
+/storage/reports/*
+!/storage/reports/.gitkeep
+
+# Local SQLite database (do not commit — production uses Supabase)
+prisma/dev.db
+prisma/dev.db-journal
+prisma/dev.db.backup
+
+# AI tool artifacts (not part of the project)
+.agents/
+.claude/
+AGENTS.md
+
+# Local scripts output
+scripts/sqlite-export.json

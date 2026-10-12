@@ -16,6 +16,10 @@ import { createDonationOrder, verifyDonationPayment } from "./actions";
 
 const PRESETS = [100, 500, 1000, 5000, 10000];
 
+// Public Razorpay key — safe to expose in the browser.
+// Read from NEXT_PUBLIC_RAZORPAY_KEY_ID (set in Vercel env vars).
+const RAZORPAY_KEY = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? "";
+
 export default function DonatePage() {
   const [amount, setAmount] = useState<number>(500);
   const [custom, setCustom] = useState("");
@@ -68,15 +72,14 @@ export default function DonatePage() {
         });
 
         // 2. Open Razorpay checkout
-        
-        if (!razorpayKey || !window.Razorpay) {
+        if (!RAZORPAY_KEY || !window.Razorpay) {
           throw new Error(
             "Payment system not ready. Please refresh and try again."
           );
         }
 
         const rzp = new window.Razorpay({
-          key: razorpayKey,
+          key: RAZORPAY_KEY,
           amount: order.amount,
           currency: order.currency,
           name: "SEZHIYAM FOUNDATION",

@@ -25,7 +25,12 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const settings = await prisma.siteSetting.findUnique({ where: { id: "main" } });
+  let settings = null;
+  try {
+    settings = await prisma.siteSetting.findUnique({ where: { id: "main" } });
+  } catch (error) {
+    console.warn("Could not load site settings from database, falling back to defaults.", error);
+  }
 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>

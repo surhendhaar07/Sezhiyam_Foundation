@@ -1,29 +1,9 @@
 // src/middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/auth.config";
 
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
-
-  const isLoginPage = nextUrl.pathname === "/admin/login";
-  const isAdminRoute = nextUrl.pathname.startsWith("/admin");
-
-  if (isAdminRoute && !isLoginPage && !isLoggedIn) {
-    const url = new URL("/admin/login", nextUrl.origin);
-    url.searchParams.set("from", nextUrl.pathname);
-    return NextResponse.redirect(url);
-  }
-
-  if (isLoginPage && isLoggedIn) {
-    return NextResponse.redirect(new URL("/admin", nextUrl.origin));
-  }
-
-  return NextResponse.next();
-});
+export default NextAuth(authConfig).auth;
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-  runtime: "nodejs",
+  matcher: ["/admin/:path*"],
 };

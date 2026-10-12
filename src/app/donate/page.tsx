@@ -68,7 +68,7 @@ export default function DonatePage() {
         });
 
         // 2. Open Razorpay checkout
-        const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+        
         if (!razorpayKey || !window.Razorpay) {
           throw new Error(
             "Payment system not ready. Please refresh and try again."

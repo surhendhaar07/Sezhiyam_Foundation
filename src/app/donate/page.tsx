@@ -16,12 +16,6 @@ import { createDonationOrder, verifyDonationPayment } from "./actions";
 
 const PRESETS = [100, 500, 1000, 5000, 10000];
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
-
 export default function DonatePage() {
   const [amount, setAmount] = useState<number>(500);
   const [custom, setCustom] = useState("");

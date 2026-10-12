@@ -7,6 +7,7 @@ interface Props {
   subtitle?: ReactNode;
   align?: "left" | "center";
   className?: string;
+  titleClassName?: string;   // ← NEW: allow callers to override title color
 }
 
 export default function SectionHeading({
@@ -15,6 +16,7 @@ export default function SectionHeading({
   subtitle,
   align = "center",
   className = "",
+  titleClassName = "",
 }: Props) {
   return (
     <div
@@ -27,7 +29,9 @@ export default function SectionHeading({
           {eyebrow}
         </span>
       )}
-      <h2 className="mt-4 font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-green leading-tight">
+      <h2
+        className={`mt-4 font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-brand-green ${titleClassName}`}
+      >
         {title}
       </h2>
       {subtitle && (

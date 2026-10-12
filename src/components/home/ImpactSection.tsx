@@ -28,8 +28,18 @@ export default function ImpactSection({ stats, governance }: { stats: Stat[]; go
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-brand-orange/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Our Impact" title="Ground Impacts & Milestones"
-          subtitle={<span className="text-white/85">Numbers that reflect years of community service. <em className="text-brand-orange not-italic font-semibold">(Placeholder values — admin will update.)</em></span>} />
+        <SectionHeading
+  eyebrow="Our Impact"
+  title="Ground Impacts & Milestones"
+  className="text-white"
+  subtitle={
+    <span className="text-white/85">
+      Numbers that reflect years of community service.{" "}
+      <em className="text-brand-orange not-italic font-semibold">
+        (Placeholder values — admin will update.)
+      </em>
+    </span>
+  }/>
 
         {stats.length > 0 && (
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
